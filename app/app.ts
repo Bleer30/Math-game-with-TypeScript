@@ -1,34 +1,22 @@
-function startGame() {
+import { Player } from './player';
+import { Game } from './game';
+import * as Helpers from './utility';
 
-    let playerName : string | undefined = getInputValue('playername');
-    logPlayer(playerName);
+let newGame: Game;
 
-    postScore(80, playerName);
-}
+// add click handler to the start game button
+document.getElementById('startGame')!.addEventListener('click', () => {
+  const player: Player = new Player();
+  player.name = Helpers.getValue('playername');
 
-function logPlayer(name : string = 'MultiMath Player'): void{
-    console.log(`New game starting for player: ${name}`);
-}
+  const problemCount: number = Number(Helpers.getValue('problemCount'));
+  const factor: number = Number(Helpers.getValue('factor'));
 
-function getInputValue(elementID: string): string | undefined {
+  newGame = new Game(player, problemCount, factor);
+  newGame.displayGame();
+});
 
-    const inputElement : HTMLInputElement = <HTMLInputElement>document.getElementById(elementID);
-
-    if (inputElement.value === ''){
-        return undefined;
-    } 
-    else {
-        return inputElement.value;
-    }
-}
-
-function postScore(score: number, playerName: string = 'MultiMath Player'):void {
-    const scoreElement: HTMLElement | null = document.getElementById('postedScores');
-    scoreElement!.innerText = `${score} - ${playerName}`;
-}
-
-document.getElementById('startGame')!.addEventListener('click', startGame);
-
-const logMessage = (message: string) => console.log(message);
-
-logMessage('Welcome to MultiMath!');
+// add click handler to the calculate score button
+document.getElementById('calculate')!.addEventListener('click', () => {
+  newGame.calculateScore();
+});
